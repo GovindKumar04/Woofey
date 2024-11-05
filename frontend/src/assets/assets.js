@@ -2,7 +2,29 @@ import basket_icon from './basket_icon.png'
 import logo from './logo.png'
 import cake from './cake.png'
 import roll from './rool.png'
-import biryani from './biryani.png'
+
+import biryani from './biryani/chickenhyderbadibiryani.png'
+import bonlessbiryani from './biryani/bonelesschickenhyderbadibiryani.png'
+import dumbiryani from './biryani/chickendumbiryani.png'
+import chickenfriedrice from './biryani/chickenfriedrice.png'
+import chickenroastrice from './biryani/chickenroastbiryani.png'
+import chickenhyderbadi from './biryani/muttonhyderbadibiryani.png'
+import vegbiryani from './biryani/veghyderbadibiryani.png'
+import vegdumbiryani from './biryani/vegdumbiryani.png'
+import eggbiryani from './biryani/eggbiryani.png'
+import muttondum from './biryani/muttondumbiryani.png'
+import chicken_biryani from './biryani/chickenbiryani.png'
+
+import nonvegloaded from './pizzas/nonvegloaded.png';
+import pannerCapsicum from './pizzas/panner&capsicum.png';
+import vegExtravagnza from './pizzas/vegExtravagnza.png';
+import capsicumRedPaprika from './pizzas/capsicun&redpaprika.png';
+import veggieParadise from './pizzas/veggiepardise.png';
+import indiantandooriPanner from './pizzas/inditandooripanner.png';
+import peppyPanner from './pizzas/peppypanner.png';
+import cheeseAndCorn from './pizzas/cheese&corn.png';
+import farmhouse from './pizzas/farmhouse.png';
+
 import pizzas from './pizzas.png'
 import icecream from './icecream.png'
 import header_img from './header_img.png'
@@ -63,15 +85,83 @@ import rating_starts from './rating_starts.png'
 import profile_icon from './profile_icon.png'
 import bag_icon from './bag_icon.png'
 import logout_icon from './logout_icon.png'
-import parcel_icon from './parcel_icon.png'
+
+import dosa from './dosa.png'
+
+import ravamasala from './dosa/ravamasala.png';
+import paneer from './dosa/paneer.png';
+import cutpiece from './dosa/cutpiece.png';
+import pannerChilli from './dosa/pannerchilli.png';
+import cheeseMasala from './dosa/cheesemasal.png';
+import schezwan from './dosa/schezwan.png';
+import onion from './dosa/onion.png';
+import paneerMasala from './dosa/paneermasasla.png';
+import plain from './dosa/plain.png';
+import masalaDosa from './dosa/masaladosa.png';
+
+export const dosas = [
+    {
+        name: "Rava Masala",
+        image: ravamasala,
+        price: ""
+    },
+    {
+        name: "Paneer",
+        image: paneer,
+        price: ""
+    },
+    {
+        name: "Cut Piece",
+        image: cutpiece,
+        price: ""
+    },
+    {
+        name: "Paneer Chilli",
+        image: pannerChilli,
+        price: ""
+    },
+    {
+        name: "Cheese Masala",
+        image: cheeseMasala,
+        price: ""
+    },
+    {
+        name: "Schezwan",
+        image: schezwan,
+        price: ""
+    },
+    {
+        name: "Onion",
+        image: onion,
+        price: ""
+    },
+    {
+        name: "Paneer Masala",
+        image: paneerMasala,
+        price: ""
+    },
+    {
+        name: "Plain",
+        image: plain,
+        price: ""
+    },
+    {
+        name: "Masala Dosa",
+        image: masalaDosa,
+        price: ""
+    }
+];
+
 
 export const assets = {
     logo,
+    dosa,
     cake,
     icecream,
     roll,
     pizzas,
     biryani,
+    bag_icon,
     basket_icon,
     header_img,
     search_icon,
@@ -89,7 +179,7 @@ export const assets = {
     profile_icon,
     logout_icon,
     bag_icon,
-    parcel_icon,
+    
     
 }
 
@@ -359,3 +449,107 @@ export const food_list = [
         category: "Noodles"
     }
 ]
+
+
+export const biryanis = [
+    {
+        name:"Bone Less Biryani",
+        image:bonlessbiryani,
+        price:"199"
+    },
+    {
+        name:"Chicken Dum Biryani",
+        image:dumbiryani,
+        price:"259"
+    },
+    {
+        name:"Chicekn Biryani",
+        image:chicken_biryani,
+        price:"299"
+    },
+    {
+        name:"Chicken Fried Rice",
+        image:chickenfriedrice,
+        price:"199"
+    },
+    {
+        name:"Chicken Roasted Rice",
+        image:chickenroastrice,
+        price:"199"
+    },
+    {
+        name:"Chicken Hyderbadi Birayani",
+        image:chickenhyderbadi,
+        price:"299"
+    },
+    {
+        name:"Veg Biryani",
+        image:vegbiryani,
+        price:"299"
+    },
+    {
+        name:"Veg Dum Biryani",
+        image:vegdumbiryani,
+        price:"499"
+    },
+    {
+        name:"Egg Biryani",
+        image:eggbiryani,
+        price:"150"
+    },
+    {
+        name:"Mutton Dum Biryani",
+        image:muttondum,
+        price:"699"
+    },
+   
+]
+
+
+export const pizza = [
+    {
+        name: "Non Veg Loaded",
+        image: nonvegloaded,
+        price: ""
+    },
+    {
+        name: "Paneer & Capsicum",
+        image: pannerCapsicum,
+        price: ""
+    },
+    {
+        name: "Veg Extravaganza",
+        image: vegExtravagnza,
+        price: ""
+    },
+    {
+        name: "Capsicum & Red Paprika",
+        image: capsicumRedPaprika,
+        price: ""
+    },
+    {
+        name: "Veggie Paradise",
+        image: veggieParadise,
+        price: ""
+    },
+    {
+        name: "Indian Tandoori Paneer",
+        image: indiantandooriPanner,
+        price: ""
+    },
+    {
+        name: "Peppy Paneer",
+        image: peppyPanner,
+        price: ""
+    },
+    {
+        name: "Cheese & Corn",
+        image: cheeseAndCorn,
+        price: ""
+    },
+    {
+        name: "Farmhouse",
+        image: farmhouse,
+        price: ""
+    }
+];

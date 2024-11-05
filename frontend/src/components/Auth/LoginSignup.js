@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { assets } from "../../assets/assets";
-import axios from 'axios'
+import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function LoginSignup({ onClose }) {
+function LoginSignup({ onClose, setlogin }) {
   const [isLogin, setisLogin] = useState(true);
+  
 
   const toggleisLogin = () => {
     setisLogin(!isLogin);
@@ -27,39 +28,43 @@ function LoginSignup({ onClose }) {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try{
-    const api_endpoint= 'http://localhost:4000'
-    if (!isLogin && formData.password !== formData.confirm_password) {
-      toast.error("Passwords do not match."); // Show error toast
-      return;
-    }
-    const payload = isLogin
-      ? {
-          email: formData.email,
-          number: formData.number,
-          password: formData.password,
-        }
-      : {
-          name: formData.name,
-          email: formData.email,
-          number: formData.number,
-          password: formData.password,
-          confirm_password: formData.confirm_password
-        };
+    try {
+      const api_endpoint = "http://localhost:4000";
+      if (!isLogin && formData.password !== formData.confirm_password) {
+        toast.error("Passwords do not match."); // Show error toast
+        return;
+      }
+      const payload = isLogin
+        ? {
+            email: formData.email,
+            number: formData.number,
+            password: formData.password,
+          }
+        : {
+            name: formData.name,
+            email: formData.email,
+            number: formData.number,
+            password: formData.password,
+            confirm_password: formData.confirm_password,
+          };
 
-      const response=  await axios.post(`${api_endpoint}${url}`,payload)
-      if (response.status === 200) {
-        toast.success(isLogin ? "Login successful!" : "Signup successful!"); 
-        onClose();
+      const response = await axios.post(`${api_endpoint}${url}`, payload);
+      if (isLogin && response.status === 200) {
+        setlogin(true);
+        toast.success(isLogin ? "Login successful!" : "Signup successful!");
+        setTimeout(()=>{
+
+          onClose();
+        },3000)
       }
-      }catch(e){
-        console.log(e)
-      }
+    } catch (e) {
+      console.log(e);
+    }
   };
   const url = isLogin ? "/signin" : "/signup";
   return (
     <>
-    <ToastContainer />
+      <ToastContainer />
       <div className="bg-orange-50 bg-opacity-30 backdrop-blur-sm w-screen h-screen fixed top-0">
         <div className="flex  flex-col p-5  bg-orange-100 w-96 h-fit fixed top-1/4 bottom-1/4 right-1/3 left-1/3 rounded m-auto ">
           <div className="flex flex-col items-center  text-xl font-bold">
@@ -195,7 +200,7 @@ function LoginSignup({ onClose }) {
 
               <div>
                 <button
-                onSubmit={handleSubmit}
+                  onSubmit={handleSubmit}
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-orange-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >

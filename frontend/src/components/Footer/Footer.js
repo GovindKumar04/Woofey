@@ -3,7 +3,7 @@ import { assets } from "../../assets/assets";
 
 function Footer() {
   return (
-    
+      
       <footer className="flex bg-orange-100 text-gray-800 py-10 items-baseline align-bottom">
         <div className="container mx-auto px-4">
           {/* Top Section */}

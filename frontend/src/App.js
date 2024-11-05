@@ -7,6 +7,7 @@ import Footer from "./components/Footer/Footer";
 
 function App() {
   const [signUpVisible, setSignupVisible] = useState(false);
+  const [login, setlogin] = useState(false)
 
   const handleSignupVisibility = () => {
     setSignupVisible(true);
@@ -15,14 +16,16 @@ function App() {
   const handleClose = () => {
     setSignupVisible(false);
   };
-
+  const handlelogin= (status)=>{
+    setlogin(status)
+  }
   return (
     <>
-      <Navbar onSignupClick={handleSignupVisibility} />
-      <div className={`${signUpVisible ? "" : ""} transition-all duration-300 pt-20 px-40 h-screen`}>
+      <Navbar onSignupClick={handleSignupVisibility} login={login}/>
+      <div className={`${signUpVisible ? "" : ""} transition-all duration-300 pt-20 px-40 min-h-screen -z-0 `}>
         <Outlet />
       </div>
-      {signUpVisible && <LoginSignup onClose={handleClose} />}
+      {signUpVisible && <LoginSignup onClose={handleClose} setlogin={handlelogin}/>}
       <Footer/>
     </>
   );

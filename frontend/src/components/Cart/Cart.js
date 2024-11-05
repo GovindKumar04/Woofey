@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-
+import { NavLink } from 'react-router-dom';
 function Cart() {
   const [cartItems, setCartItems] = useState([]); 
 
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const response = await fetch('/api/cart'); // Example API
+        const response = await fetch('/api/cart');
         const data = await response.json();
         setCartItems(data);
       } catch (error) {
@@ -23,7 +23,9 @@ function Cart() {
     <div>
       <h1>Your Cart</h1>
       <p>Total: {total}</p>
-      
+      <NavLink to="/payment">
+        hello
+      </NavLink>
     </div>
   );
 }

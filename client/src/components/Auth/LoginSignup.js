@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { assets } from "../../assets/assets";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
@@ -64,7 +64,7 @@ function LoginSignup({ onClose, setlogin }) {
   const url = isLogin ? "/signin" : "/signup";
   return (
     <>
-      <ToastContainer />
+      <ToastContainer/>
       <div className="bg-orange-50 bg-opacity-30 backdrop-blur-sm w-screen h-screen fixed top-0">
         <div className="flex  flex-col p-5  bg-orange-100 w-96 h-fit fixed top-1/4 bottom-1/4 right-1/3 left-1/3 rounded m-auto ">
           <div className="flex flex-col items-center  text-xl font-bold">
@@ -224,3 +224,5 @@ function LoginSignup({ onClose, setlogin }) {
 }
 
 export default LoginSignup;
+
+

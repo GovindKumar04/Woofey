@@ -8,6 +8,7 @@ import Pizzas from "../Pages/Pizzas";
 import Icecream from "../Pages/Icecream";
 import Dosa from "../Pages/Dosa";
 import Payment from "../Payment/Payment";
+import Profile from "../Profile/Profile";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
         path: "/",
         element: <Navigate to="/home" replace />,
       },
+      {
+        path: '/profile',
+        element: <Profile/>
+      }
     ],
   },
 ]);

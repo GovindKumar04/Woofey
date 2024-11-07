@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { assets } from "../../assets/assets";
 import { NavLink } from "react-router-dom";
 
 function Navbar({ onSignupClick, login }) {
-  const [menu, setmenu] = useState("home");
+  
 
   return (
     <div className="flex items-center shadow min-w-full min-h-20 fixed z-50 bg-white">
@@ -62,13 +62,14 @@ function Navbar({ onSignupClick, login }) {
           </button>
         ) : (
           <NavLink
-            to=""
+            to="/profile"
             className={({ isActive }) =>
               `block py-2 pr-4 pl-3 duration-200 ${
                 isActive ? "text-orange-700" : "text-gray-700"
               } border-b  hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
             }
           >
+            
             <img src={assets.profile_icon} alt="" />
           </NavLink>
         )}

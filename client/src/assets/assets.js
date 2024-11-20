@@ -455,52 +455,52 @@ export const biryanis = [
     {
         name:"Bone Less Biryani",
         image:bonlessbiryani,
-        price:"199"
+        price:199
     },
     {
         name:"Chicken Dum Biryani",
         image:dumbiryani,
-        price:"259"
+        price:259
     },
     {
         name:"Chicekn Biryani",
         image:chicken_biryani,
-        price:"299"
+        price:299
     },
     {
         name:"Chicken Fried Rice",
         image:chickenfriedrice,
-        price:"199"
+        price:199
     },
     {
         name:"Chicken Roasted Rice",
         image:chickenroastrice,
-        price:"199"
+        price:199
     },
     {
         name:"Chicken Hyderbadi Birayani",
         image:chickenhyderbadi,
-        price:"299"
+        price:299
     },
     {
         name:"Veg Biryani",
         image:vegbiryani,
-        price:"299"
+        price:299
     },
     {
         name:"Veg Dum Biryani",
         image:vegdumbiryani,
-        price:"499"
+        price:499
     },
     {
         name:"Egg Biryani",
         image:eggbiryani,
-        price:"150"
+        price:150
     },
     {
         name:"Mutton Dum Biryani",
         image:muttondum,
-        price:"699"
+        price:699
     },
    
 ]

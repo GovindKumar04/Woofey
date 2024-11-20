@@ -1,11 +1,14 @@
 import React, { useState } from "react";
+import addtocart from "../Cart/Addcart";
 import { assets } from "../../assets/assets";
 
-const Card = ({ name, price, rating, image }) => {
+const Card = ({ name, image, price,rating, description, category }) => {
   const [count, setCount] = useState(0); // Initializing state
 
   const addToCart = () => {
-    setCount((prevCount) => prevCount + 1); // Increment count
+    setCount((prevCount) => prevCount + 1); 
+    addtocart(name, image, price, description)
+    // Increment count
   };
 
   const removeFromCart = () => {
@@ -14,6 +17,7 @@ const Card = ({ name, price, rating, image }) => {
     }
   };
 
+  
   return (
     <div className="h-44 mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-5">
       <div className="flex">
@@ -51,6 +55,7 @@ const Card = ({ name, price, rating, image }) => {
               onClick={addToCart}
               aria-label="Add to cart"
             >
+
               ADD
             </button>
           )}

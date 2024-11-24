@@ -29,7 +29,7 @@ function LoginSignup({ onClose, setlogin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const api_endpoint = "http://localhost:4000";
+      const api_endpoint = "https://woofey-gyj7.vercel.app"
       if (!isLogin && formData.password !== formData.confirm_password) {
         toast.error("Passwords do not match."); 
         return;

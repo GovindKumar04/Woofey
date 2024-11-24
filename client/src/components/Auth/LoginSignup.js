@@ -31,7 +31,7 @@ function LoginSignup({ onClose, setlogin }) {
     try {
       const api_endpoint = "http://localhost:4000";
       if (!isLogin && formData.password !== formData.confirm_password) {
-        toast.error("Passwords do not match."); // Show error toast
+        toast.error("Passwords do not match."); 
         return;
       }
       const payload = isLogin
@@ -51,11 +51,25 @@ function LoginSignup({ onClose, setlogin }) {
       const response = await axios.post(`${api_endpoint}${url}`, payload);
       if (isLogin && response.status === 200) {
         setlogin(true);
-        toast.success(isLogin ? "Login successful!" : "Signup successful!");
+        toast.success("Login successful!");
         setTimeout(()=>{
 
           onClose();
         },3000)
+      }else if(isLogin && response.status === 404){
+        toast.error(response.msg)
+      }else if(isLogin && response.status === 401){
+        toast.error(response.msg)
+      }
+      if(!isLogin && response.status===201){
+        toast.success("Signup successful!");
+        toggleisLogin()
+        setTimeout(()=>{
+
+          onClose();
+        },3000)
+      }else if(!isLogin && response.status===409){
+        toast.error(response.msg);
       }
     } catch (e) {
       console.log(e);

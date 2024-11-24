@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import removeFromCart from "../Cart/Removecart";
 import { NavLink } from 'react-router-dom';
 
 function Cart() {
@@ -27,7 +28,7 @@ function Cart() {
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  marginBottom: '15px',
+                  marginBottom: '35px',
                   border: '1px solid #ccc',
                   borderRadius: '10px',
                   padding: '10px',
@@ -42,8 +43,12 @@ function Cart() {
                   <h3>{item.name}</h3>
                   <p>{item.description}</p>
                   <p>Price: ₹{item.price.toFixed(2)}</p>
+                  <button className="p-1 bg-orange-600 rounded absolute right-46 text-white" onClick={removeFromCart}>Remove</button>
                 </div>
+               
+
               </li>
+              
             ))}
           </ul>
           <p>

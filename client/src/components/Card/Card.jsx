@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import addtocart from "../Cart/Addcart";
+
 import { assets } from "../../assets/assets";
 
 const Card = ({ name, image, price,rating, description, category }) => {

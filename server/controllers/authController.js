@@ -38,4 +38,8 @@ const signin = async (req, res) => {
   }
 };
 
-module.exports = {signup, signin}
+const reqsend = async (req,res) => {
+  res.send("hello hunny bunny");
+};
+
+module.exports = {signup, signin, reqsend}

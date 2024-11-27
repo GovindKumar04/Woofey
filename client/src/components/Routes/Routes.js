@@ -9,6 +9,7 @@ import Icecream from "../Pages/Icecream";
 import Dosa from "../Pages/Dosa";
 import Payment from "../Payment/Payment";
 import Profile from "../Profile/Profile";
+import Contact from "../Contact/Contact";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: "/biryani",
         element: <Biryani />,
+      },
+      {
+        path : "/contact",
+        element: <Contact/>
       },
       {
         path: "/roll",

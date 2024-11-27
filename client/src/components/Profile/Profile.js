@@ -6,9 +6,9 @@ function Profile() {
     <div>
       <div>
         <aside>
-            <div>Name: </div>
-            <div>Mobile Number:</div>
-            <div>Address</div>
+            <div className='font-bold'>Name: <span className='font-semibold'>Govind Kumar</span></div>
+            <div className='font-bold'>Mobile Number: <span className='font-semibold'>8102558417</span></div>
+            <div className='font-bold'>Email: <span className='font-semibold'>myselfgovind116@gmail.com</span></div>
             {/* <div></div> */}
         </aside>
       </div>

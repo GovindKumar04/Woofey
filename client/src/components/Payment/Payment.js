@@ -1,4 +1,3 @@
-import React from "react";
 
 const Payment = () => {
   const loadRazorpayScript = () => {
@@ -12,46 +11,63 @@ const Payment = () => {
   };
 
   const handlePayment = async () => {
-    const isLoaded = await loadRazorpayScript();
-    if (!isLoaded) {
-      alert("Failed to load Razorpay SDK. Please check your internet connection.");
-      return;
-    }
+  const isLoaded = await loadRazorpayScript();
+  if (!isLoaded) {
+    alert("Failed to load Razorpay SDK. Please check your internet connection.");
+    return;
+  }
 
-    // Replace with your backend API to create an order and get payment details
-    const paymentData = {
-      amount: 500 * 100, // Amount in paise (₹5.00)
-      currency: "INR",
-      name: "Woofey",
-      description: "Food Delivery Payment",
-      image: "https://example.com/logo.png", // Replace with your logo
-      order_id: "order_PNaOWoW6DGaO24", // Replace with order_id from backend
-      prefill: {
-        name: "John Doe", // Example pre-filled user data
-        email: "john.doe@example.com",
-        contact: "9999999999",
-      },
-      notes: {
-        address: "Customer's Address",
-      },
-      theme: {
-        color: "#3399cc",
-      },
-      handler: (response) => {
-        alert(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
-        console.log("Payment Response:", response);
-      },
-    };
+  // Fetch order from backend
+  const result = await fetch("http://localhost:5000/api/create-order", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ amount: 500 }), // amount in rupees
+  });
 
-    const razorpay = new window.Razorpay(paymentData);
+  const data = await result.json();
 
-    razorpay.on("payment.failed", (response) => {
-      alert(`Payment Failed! Reason: ${response.error.reason}`);
-      console.log("Payment Error:", response);
-    });
+  if (!data.id) {
+    alert("Failed to create order. Please try again.");
+    return;
+  }
 
-    razorpay.open();
+  const paymentData = {
+    key: "YOUR_KEY_ID", // Razorpay public key
+    amount: data.amount,
+    currency: data.currency,
+    name: "Woofey",
+    description: "Food Delivery Payment",
+    image: "https://example.com/logo.png",
+    order_id: data.id, // Order ID from backend
+    handler: (response) => {
+      alert(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
+      console.log("Payment Response:", response);
+    },
+    prefill: {
+      name: "John Doe",
+      email: "john.doe@example.com",
+      contact: "9999999999",
+    },
+    notes: {
+      address: "Customer's Address",
+    },
+    theme: {
+      color: "#3399cc",
+    },
   };
+
+  const razorpay = new window.Razorpay(paymentData);
+
+  razorpay.on("payment.failed", (response) => {
+    alert(`Payment Failed! Reason: ${response.error.reason}`);
+    console.log("Payment Error:", response);
+  });
+
+  razorpay.open();
+};
+
 
   return (
     <div style={{ padding: "20px", textAlign: "center" }}>
@@ -69,7 +85,7 @@ const Payment = () => {
         }}
         onClick={handlePayment}
       >
-        Pay Now
+        Pay NoW
       </button>
     </div>
   );

@@ -1,6 +1,8 @@
-import React from "react";
+
 import addtocart from "../Cart/Addcart";
-function Food({ name, image, price, description, category }) {   
+
+
+function Food({ name, image, price, description}) {   
   return (
     <div>
       <div className="w-64">
@@ -12,10 +14,8 @@ function Food({ name, image, price, description, category }) {
             <p className="text-gray-700">Price: ₹{price}</p>
           </div>
           <div className="relative bottom-12 left-44">
-            <button onClick={(e)=>{console.log("click",name)
-            console.log("click",image)
+            <button onClick={(e)=>{
             addtocart(name, image, price, description)
-
             }} className="  bg-gray-300 text-green-700 px-3 py-1 rounded hover:bg-orange-600 font-bold m-auto">
               ADD
             </button>

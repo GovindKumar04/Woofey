@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { assets } from "../../assets/assets";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
@@ -6,19 +6,18 @@ import "react-toastify/dist/ReactToastify.css";
 
 function LoginSignup({ onClose, setlogin }) {
   const [isLogin, setisLogin] = useState(true);
-  
 
   const toggleisLogin = () => {
     setisLogin(!isLogin);
   };
-
+  const [confirm_password, set_confirm_password] = useState("");
   const [formData, setformData] = useState({
     name: "",
     email: "",
     number: "",
     password: "",
-    confirm_password: "",
   });
+
   const handleChange = async (e) => {
     const { name, value } = e.target;
     setformData((prevData) => ({
@@ -26,14 +25,18 @@ function LoginSignup({ onClose, setlogin }) {
       [name]: value,
     }));
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const api_endpoint = "http://localhost:5000/api/v1/user";
+    const url = isLogin ? "/login" : "/register";
+
     try {
-      const api_endpoint = "http://localhost:4000"
-      if (!isLogin && formData.password !== formData.confirm_password) {
-        toast.error("Passwords do not match."); 
+      if (!isLogin && formData.password !== confirm_password) {
+        toast.error("Passwords do not match.");
         return;
       }
+
       const payload = isLogin
         ? {
             email: formData.email,
@@ -45,191 +48,172 @@ function LoginSignup({ onClose, setlogin }) {
             email: formData.email,
             number: formData.number,
             password: formData.password,
-            confirm_password: formData.confirm_password,
           };
 
-      const response = await axios.post(`${api_endpoint}${url}`, payload);
-      if (isLogin && response.status === 200) {
-        setlogin(true);
-        toast.success("Login successful!");
-        setTimeout(()=>{
-
-          onClose();
-        },3000)
-      }else if(isLogin && response.status === 404){
-        toast.error(response.msg)
-      }else if(isLogin && response.status === 401){
-        toast.error(response.msg)
-      }
-      if(!isLogin && response.status===201){
-        toast.success("Signup successful!");
-        toggleisLogin()
-        setTimeout(()=>{
-
-          onClose();
-        },3000)
-      }else if(!isLogin && response.status===409){
-        toast.error(response.msg);
+      const response = await axios.post(`${api_endpoint}${url}`, payload, {
+        withCredentials: true,
+      });
+      // console.log(response);
+      if (response.status >= 200 && response.status < 300) {
+        toast.success(isLogin ? "Login successful!" : "Signup successful!");
+        if (isLogin) setlogin(true);
+        setTimeout(() => onClose(), 1500);
+      } else {
+        toast.error(response.data?.msg || "An error occurred.");
       }
     } catch (e) {
-      console.log(e);
+      toast.error("Something went wrong. Please try again.");
+      console.error(e);
     }
   };
-  const url = isLogin ? "/signin" : "/signup";
+
   return (
     <>
-      <ToastContainer/>
-      <div className="bg-orange-50 bg-opacity-30 backdrop-blur-sm w-screen h-screen fixed top-0">
-        <div className="flex  flex-col p-5  bg-orange-100 w-96 h-fit fixed top-1/4 bottom-1/4 right-1/3 left-1/3 rounded m-auto ">
-          <div className="flex flex-col items-center  text-xl font-bold">
-            <div>
-              {" "}
-              <img src={assets.logo} alt="" className="w-20" />
-              <span onClick={onClose} className="cursor-pointer text-red-600">
-                X
-              </span>
-            </div>
+      <ToastContainer autoClose={3000} />
+      <div className="bg-orange-50 bg-opacity-30 backdrop-blur-sm w-full h-full fixed inset-0 z-50 flex items-center justify-center px-4">
+        <div className="relative w-full max-w-md bg-orange-100 rounded-lg shadow-lg p-6">
+          {/* Close Button */}
+          <button
+            onClick={onClose}
+            className="absolute top-2 right-2 text-red-600 font-bold text-2xl hover:text-red-800"
+            aria-label="Close"
+          >
+            ×
+          </button>
 
-            <h1 className="mt-3 text-slate-800">
-              {isLogin ? "Sign in to your account" : "Sign up to new account"}
+          {/* Logo and Header */}
+          <div className="flex flex-col items-center mb-4">
+            <img src={assets.logo} alt="Logo" className="w-20" />
+            <h1 className="mt-3 text-xl font-bold text-slate-800 text-center">
+              {isLogin
+                ? "Sign in to your account"
+                : "Sign up for a new account"}
             </h1>
           </div>
 
-          <div className="mt-3 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form onSubmit={handleSubmit} method="POST" className="space-y-6">
-              {!isLogin && (
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-gray-900"
-                  >
-                    Name
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      onChange={handleChange}
-                      id="name"
-                      name="name"
-                      type="text"
-                      required
-                      className="block w-full px-3 rounded-md py-1.5 text-gray-900 shadow-sm focus:outline-none placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                    />
-                  </div>
-                </div>
-              )}
-
+          {/* Form */}
+          <form onSubmit={handleSubmit} method="POST" className="space-y-4">
+            {!isLogin && (
               <div>
                 <label
-                  htmlFor="email"
+                  htmlFor="name"
                   className="block text-sm font-medium text-gray-900"
                 >
-                  Email address
+                  Name
                 </label>
-                <div className="mt-1">
-                  <input
-                    onChange={handleChange}
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    autoComplete="email"
-                    className="block w-full px-3 rounded-md  py-1.5 text-gray-900 shadow-sm focus:outline-none placeholder:text-gray-400  sm:text-sm sm:leading-6"
-                  />
-                </div>
+                <input
+                  onChange={handleChange}
+                  id="name"
+                  name="name"
+                  type="text"
+                  required
+                  className="w-full px-3 py-2 rounded-md text-gray-900 shadow-sm focus:outline-none"
+                />
               </div>
+            )}
 
-              {!isLogin && (
-                <div>
-                  <label
-                    htmlFor="number"
-                    className="block text-sm font-medium text-gray-900"
-                  >
-                    Mobile Number
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      onChange={handleChange}
-                      id="number"
-                      name="number"
-                      type="tel"
-                      required
-                      autoComplete="email"
-                      className="block w-full px-3 rounded-md  py-1.5 text-gray-900 shadow-sm focus:outline-none placeholder:text-gray-400  sm:text-sm sm:leading-6"
-                    />
-                  </div>
-                </div>
-              )}
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-900"
+              >
+                Email address
+              </label>
+              <input
+                onChange={handleChange}
+                id="email"
+                name="email"
+                type="email"
+                required
+                autoComplete="email"
+                className="w-full px-3 py-2 rounded-md text-gray-900 shadow-sm focus:outline-none"
+              />
+            </div>
 
+            {!isLogin && (
               <div>
-                <div className="flex items-center justify-between">
-                  <label
-                    htmlFor="password"
-                    className="block text-sm font-medium leading-6 text-gray-900"
+                <label
+                  htmlFor="number"
+                  className="block text-sm font-medium text-gray-900"
+                >
+                  Mobile Number
+                </label>
+                <input
+                  onChange={handleChange}
+                  id="number"
+                  name="number"
+                  type="tel"
+                  required
+                  className="w-full px-3 py-2 rounded-md text-gray-900 shadow-sm focus:outline-none"
+                />
+              </div>
+            )}
+
+            <div>
+              <div className="flex justify-between">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-900"
+                >
+                  Password
+                </label>
+                {isLogin && (
+                  <button
+                    type="button"
+                    className="text-sm text-orange-600 hover:text-orange-500"
                   >
-                    Password
-                  </label>
-                  {isLogin && (
-                    <div className="text-sm">
-                      <a
-                        href="#"
-                        className="font-semibold text-orange-600 hover:text-orange-500"
-                      >
-                        Forgot password?
-                      </a>
-                    </div>
-                  )}
-                </div>
-                <div className="mt-1">
-                  <input
-                    onChange={handleChange}
-                    id="password"
-                    name="password"
-                    type="password"
-                    required
-                    autoComplete="current-password"
-                    className="block w-full px-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm focus:outline-none placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                  />
-                </div>
-                {!isLogin && (
-                  <div className="mt-5">
-                    <label
-                      htmlFor="name"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      Confirm password
-                    </label>
-                    <div className="mt-1">
-                      <input
-                        onChange={handleChange}
-                        id="confirm-password"
-                        name="confirm_password"
-                        type="text"
-                        required
-                        className="block w-full px-3 rounded-md py-1.5 text-gray-900 shadow-sm focus:outline-none placeholder:text-gray-400 sm:text-sm sm:leading-6"
-                      />
-                    </div>
-                  </div>
+                    Forgot password?
+                  </button>
                 )}
               </div>
+              <input
+                onChange={handleChange}
+                id="password"
+                name="password"
+                type="password"
+                required
+                autoComplete="current-password"
+                className="w-full px-3 py-2 rounded-md text-gray-900 shadow-sm focus:outline-none"
+              />
+            </div>
 
+            {!isLogin && (
               <div>
-                <button
-                  onSubmit={handleSubmit}
-                  type="submit"
-                  className="flex w-full justify-center rounded-md bg-orange-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                <label
+                  htmlFor="confirm-password"
+                  className="block text-sm font-medium text-gray-900"
                 >
-                  {isLogin ? "Sign in" : "Sign up"}
-                </button>
+                  Confirm password
+                </label>
+                <input
+                  onChange={(e) => set_confirm_password(e.target.value)}
+                  value={confirm_password}
+                  id="confirm-password"
+                  name="confirm_password"
+                  type="password"
+                  required
+                  className="w-full px-3 py-2 rounded-md text-gray-900 shadow-sm focus:outline-none"
+                />
               </div>
-            </form>
-          </div>
-          <div>
-            <p className="mt-5 text-center text-sm text-gray-500">
-              {isLogin ? "Not a member?" : "Already a member?"}
-              <a href="#" className="text-orange-600" onClick={toggleisLogin}>
-                {isLogin ? "Sign up" : "Sign in"}
-              </a>
-            </p>
+            )}
+
+            <button
+              type="submit"
+              className="w-full bg-orange-600 text-white font-semibold py-2 rounded-md hover:bg-orange-500"
+            >
+              {isLogin ? "Sign in" : "Sign up"}
+            </button>
+          </form>
+
+          {/* Toggle Login/Signup */}
+          <div className="mt-4 text-center text-sm text-gray-600">
+            {isLogin ? "Not a member?" : "Already a member?"}{" "}
+            <button
+              onClick={toggleisLogin}
+              className="text-orange-600 font-semibold"
+            >
+              {isLogin ? "Sign up" : "Sign in"}
+            </button>
           </div>
         </div>
       </div>
@@ -238,5 +222,3 @@ function LoginSignup({ onClose, setlogin }) {
 }
 
 export default LoginSignup;
-
-

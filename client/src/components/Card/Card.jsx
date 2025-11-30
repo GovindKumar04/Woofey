@@ -1,19 +1,21 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import addtocart from "../Cart/Addcart";
+import removeFromCart from "../Cart/Removecart";
 
 import { assets } from "../../assets/assets";
 
-const Card = ({ name, image, price,rating, description, category }) => {
-  const [count, setCount] = useState(0); // Initializing state
+const Card = ({ name, image, price,rating, description}) => {
+  const [count, setCount] = useState(0);
 
   const addToCart = () => {
     setCount((prevCount) => prevCount + 1); 
     addtocart(name, image, price, description)
-    // Increment count
+    
   };
 
-  const removeFromCart = () => {
+  const removeFromCart = (e) => {
     if (count > 0) {
+      
       setCount((prevCount) => prevCount - 1); // Decrement count
     }
   };

@@ -5,6 +5,7 @@ import {
   deleteUser,
   updateUser,
   logoutUser,
+  loggedInUser
 } from "../controllers/auth.controller.js";
 import { verifyUser } from "../middlewares/user.middleware.js";
 
@@ -15,4 +16,5 @@ router.route("/login").post(loginUser);
 router.route("/delete").post(verifyUser, deleteUser);
 router.route("/update").post(verifyUser, updateUser);
 router.route("/logout").post(verifyUser, logoutUser);
+router.route("/loggedInUser").post(verifyUser, loggedInUser);
 export { router };

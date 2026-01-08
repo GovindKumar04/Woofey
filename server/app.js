@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 import { router } from "./routes/user.routes.js";
 const app= express();
 
-app.use(cors({origin: "http://localhost:3000", // React frontend
+app.use(cors({origin: "http://localhost:5173", // React frontend
   credentials: true, }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));

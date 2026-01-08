@@ -92,3 +92,9 @@ export const logoutUser = asyncHandler(async(req,res) => {
     .clearCookie("refreshToken", options)
     .json({ msg: "Logged out successfully" });
 })
+
+export const loggedInUser = asyncHandler(async(req,res) => {
+  const user = req.user;
+  if(!user) return res.status(401).json({user:"No user found"});
+  return res.status(200).json({user: user})
+})

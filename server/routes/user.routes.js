@@ -16,5 +16,5 @@ router.route("/login").post(loginUser);
 router.route("/delete").post(verifyUser, deleteUser);
 router.route("/update").post(verifyUser, updateUser);
 router.route("/logout").post(verifyUser, logoutUser);
-router.route("/loggedInUser").post(verifyUser, loggedInUser);
+router.route("/loggedInUser").get(verifyUser, loggedInUser);
 export { router };

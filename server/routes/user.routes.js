@@ -1,15 +1,15 @@
-import { Router } from "express";
-import {
+const express = require("express");
+const {
   loginUser,
   registerUser,
   deleteUser,
   updateUser,
   logoutUser,
-  loggedInUser
-} from "../controllers/auth.controller.js";
-import { verifyUser } from "../middlewares/user.middleware.js";
+  loggedInUser,
+} = require("../controllers/auth.controller.js");
+const { verifyUser } = require("../middlewares/user.middleware.js");
 
-const router = Router();
+const router = express.Router();
 
 router.route("/register").post(registerUser);
 router.route("/login").post(loginUser);
@@ -17,4 +17,5 @@ router.route("/delete").post(verifyUser, deleteUser);
 router.route("/update").post(verifyUser, updateUser);
 router.route("/logout").post(verifyUser, logoutUser);
 router.route("/loggedInUser").get(verifyUser, loggedInUser);
-export { router };
+
+module.exports = { router };

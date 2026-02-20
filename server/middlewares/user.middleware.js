@@ -1,19 +1,25 @@
-import { User } from "../model/user.model.js";
-import { ApiError } from "../utils/ApiError.js";
-import { asyncHandler } from "../utils/asyncHandler.js";
-import jwt from 'jsonwebtoken'
+const { User } = require("../model/user.model.js");
+const { ApiError } = require("../utils/ApiError.js");
+const { asyncHandler } = require("../utils/asyncHandler.js");
+const jwt = require("jsonwebtoken");
 
-export const verifyUser = asyncHandler(async(req,res, next) => {
-    const token = await req.cookies?.accessToken
+const verifyUser = asyncHandler(async (req, res, next) => {
+  const token = req.cookies?.accessToken;
 
-    if(!token) throw new ApiError(401, "No logged in user exist")
+  if (!token) throw new ApiError(401, "No logged in user exist");
 
-    const decodeToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+  const decodeToken = jwt.verify(
+    token,
+    process.env.ACCESS_TOKEN_SECRET
+  );
 
-    const user = await User.findById(decodeToken._id);
+  const user = await User.findById(decodeToken._id);
 
-    if(!user) throw new ApiError(401, "there is no autohrized user found")
-    req.user=user;
-    next();
+  if (!user)
+    throw new ApiError(401, "there is no authorized user found");
 
-})
+  req.user = user;
+  next();
+});
+
+module.exports = { verifyUser };

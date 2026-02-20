@@ -1,14 +1,14 @@
-import "./config/envConfig.js"
-import { connectDB } from "./config/db.js";
-import { app } from "./app.js";
+require("./config/envConfig.js");
 
+const { connectDB } = require("./config/db.js");
+const { app } = require("./app.js");
 
-
-await connectDB()
-.then(() => {
-    app.listen(process.env.PORT || 5000)
-})
-.catch((error) => {
-    console.log(error)
-})
-
+connectDB()
+  .then(() => {
+    app.listen(process.env.PORT || 5000, () => {
+      console.log(`Server running on port ${process.env.PORT || 5000}`);
+    });
+  })
+  .catch((error) => {
+    console.log("Database connection failed:", error);
+  });

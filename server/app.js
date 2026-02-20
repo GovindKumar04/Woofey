@@ -11,5 +11,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
 app.use("/api/v1/user", router)
-
+app.get("/", (req, res) => {
+  res.send("Server is running 🚀");
+});
 export {app}

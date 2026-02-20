@@ -1,5 +1,5 @@
 export const options = {
   httpOnly: true,
-  secure: true,
+  secure: true, // Render uses HTTPS
   sameSite: "none",
 };

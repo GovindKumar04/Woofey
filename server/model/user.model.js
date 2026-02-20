@@ -55,8 +55,8 @@ userSchema.methods.genrateRefreshToken = function () {
       _id: this._id,
       email: this.email,
     },
-    process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN }
+    process.env.REFRESH_TOKEN_SECRET,
+    { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN }
   );
 };
 userSchema.methods.genrateAccessToken = function () {
@@ -66,7 +66,7 @@ userSchema.methods.genrateAccessToken = function () {
       email: this.email,
     },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN }
+    { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN }
   );
 };
 export const User = mongoose.model("User", userSchema);

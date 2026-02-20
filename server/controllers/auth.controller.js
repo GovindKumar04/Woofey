@@ -22,7 +22,7 @@ export const registerUser = asyncHandler(async (req, res) => {
   if (!user) throw new ApiError(500, "Problem creating user");
 
   res
-    .status(201)
+    .status(200)
     .json({ msg: `${name} your profile succesfully created`, user });
 });
 

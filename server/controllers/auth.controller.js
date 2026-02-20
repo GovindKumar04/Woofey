@@ -94,7 +94,7 @@ export const logoutUser = asyncHandler(async(req,res) => {
 })
 
 export const loggedInUser = asyncHandler(async(req,res) => {
-  const user = req.user;
+  const user = await req.user;
   if(!user) return res.status(401).json({user:"No user found"});
   return res.status(200).json({user: user})
 })

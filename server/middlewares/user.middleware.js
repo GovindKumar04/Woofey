@@ -4,7 +4,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from 'jsonwebtoken'
 
 export const verifyUser = asyncHandler(async(req,res, next) => {
-    const token = req.cookies?.accessToken
+    const token = await req.cookies?.accessToken
 
     if(!token) throw new ApiError(401, "No logged in user exist")
 

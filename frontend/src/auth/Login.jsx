@@ -26,16 +26,40 @@ function Login({ onClose }) {
 
   return (
     <div className="relative">
-      <button className="absolute top-2 right-2 text-red-600 text-xl" onClick={onClose}>×</button>
+      <button
+        className="absolute top-2 right-2 text-red-600 text-xl"
+        onClick={onClose}
+      >
+        ×
+      </button>
 
       <h2 className="text-xl font-bold mb-4 text-center">Login</h2>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <input className="border p-2 rounded" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input className="border p-2 rounded" placeholder="Phone" value={number} onChange={(e) => setNumber(e.target.value)} />
-        <input className="border p-2 rounded" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        <button disabled={loading} className="bg-green-500 text-white py-2 rounded">
-          {loading ? "Logging in..." : "Login"}
+        <input
+          className="border p-2 rounded"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          className="border p-2 rounded"
+          placeholder="Phone"
+          value={number}
+          onChange={(e) => setNumber(e.target.value)}
+        />
+        <input
+          className="border p-2 rounded"
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button
+          disabled={loading}
+          className="bg-green-500 text-white py-2 rounded"
+        >
+          {loading ? "Logging in..." : "Login"} 
         </button>
       </form>
     </div>

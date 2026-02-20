@@ -4,13 +4,18 @@ import Food from "../components/Food";
 import CategoryCard from "../components/CategoryCard";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, decreaseQty } from "../redux/cartSlice";
+import useAuthGuard from "../hooks/useAuthGuard";
+
 function Home() {
   const [cartCounts, setCartCounts] = useState({});
   const dispatch = useDispatch();
+  const { requireAuth } = useAuthGuard();
 
   const handleAddToCart = (food) => {
-    const action = addToCart(food);
-    dispatch(action);
+    requireAuth(
+      () => dispatch(addToCart(food)),
+      "Login required to add items to cart"
+    );
     setCartCounts((prev) => ({
       ...prev,
       [food._id]: (prev[food._id] || 0) + 1,

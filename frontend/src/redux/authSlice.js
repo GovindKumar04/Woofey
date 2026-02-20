@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { loginUser, registerUser, logoutUser, getLoggedInUser } from "../utils/auth";
 
 export const login = createAsyncThunk(
-  "auth/login",
+  "user/login",
   async (data, { rejectWithValue }) => {
     try {
       const res = await loginUser(data);
@@ -14,7 +14,7 @@ export const login = createAsyncThunk(
 );
 
 export const register = createAsyncThunk(
-  "auth/register",
+  "user/register",
   async (data, { rejectWithValue }) => {
     try {
       const res = await registerUser(data);
@@ -26,7 +26,7 @@ export const register = createAsyncThunk(
 );
 
 export const fetchUser = createAsyncThunk(
-  "auth/fetchUser",
+  "user/fetchUser",
   async (_, { rejectWithValue }) => {
     try {
       return await getLoggedInUser();
@@ -36,7 +36,7 @@ export const fetchUser = createAsyncThunk(
   }
 );
 
-export const logout = createAsyncThunk("auth/logout", async () => {
+export const logout = createAsyncThunk("user/logout", async () => {
   await logoutUser();
 });
 

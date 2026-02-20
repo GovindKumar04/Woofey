@@ -15,8 +15,9 @@ function App() {
   const [showSignup, setShowSignup] = useState(false);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchUser());
+  useEffect( () => {
+    const a=dispatch( fetchUser());
+    
   }, [dispatch]);
 
   return (

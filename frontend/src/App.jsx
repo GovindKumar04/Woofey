@@ -17,7 +17,7 @@ function App() {
 
   useEffect( () => {
     const a=dispatch( fetchUser());
-    
+    console.log(a)
   }, [dispatch]);
 
   return (

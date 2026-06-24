@@ -1,5 +1,5 @@
 import React from "react";
-import { assets } from "../assets/assets";
+import { assets } from "../../../../assets/assets";
 
 function Food({ name, image, price, description, count, onAdd, onRemove }) {
   return (

@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
-import { removeFromCart, decreaseQty } from "../redux/cartSlice";
-import axios from "../api/axios";
+import { removeFromCart, decreaseQty } from "../../redux/cartSlice";
+import axios from "../../api/axios";
 import { toast } from "react-toastify";
 
 function Cart() {

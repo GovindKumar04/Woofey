@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { loginUser, registerUser, logoutUser, getLoggedInUser } from "../utils/auth";
+import { loginUser, registerUser, logoutUser, getLoggedInUser } from "../api/authApi";
 
 export const login = createAsyncThunk(
   "user/login",
@@ -46,6 +46,7 @@ const authSlice = createSlice({
     user: null,
     isAuthenticated: false,
     loading: false,
+    authChecked: false, // becomes true once the initial cookie check resolves
     error: null,
   },
   reducers: {},
@@ -79,9 +80,20 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
+      .addCase(fetchUser.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(fetchUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.authChecked = true;
         state.user = action.payload;
         state.isAuthenticated = !!action.payload;
+      })
+      .addCase(fetchUser.rejected, (state) => {
+        state.loading = false;
+        state.authChecked = true;
+        state.user = null;
+        state.isAuthenticated = false;
       })
 
       .addCase(logout.fulfilled, (state) => {

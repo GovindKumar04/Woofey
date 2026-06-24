@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { assets, food_list } from "../assets/assets";
-import Food from "../components/Food";
-import CategoryCard from "../components/CategoryCard";
-import { useDispatch, useSelector } from "react-redux";
-import { addToCart, decreaseQty } from "../redux/cartSlice";
-import useAuthGuard from "../hooks/useAuthGuard";
+import { assets, food_list } from "../../assets/assets";
+import Food from "./components/Food";
+import CategoryCard from "./components/CategoryCard";
+import { useDispatch } from "react-redux";
+import { addToCart, decreaseQty } from "../../redux/cartSlice";
+import useAuthGuard from "../../hooks/useAuthGuard";
 
 function Home() {
   const [cartCounts, setCartCounts] = useState({});
@@ -42,12 +42,12 @@ function Home() {
   const foodCategories = [...new Set(food_list.map((f) => f.category))];
 
   return (
-    <div className="px-4 pt-28">
-      <h1 className="text-2xl font-bold mb-6 text-center">
+    <div className="px-4 sm:px-8 lg:px-16 pt-24 sm:pt-28">
+      <h1 className="text-xl sm:text-2xl font-bold mb-6 text-center">
         What's on your mind?
       </h1>
 
-      <div className="flex gap-4 justify-center overflow-x-auto mb-8">
+      <div className="flex gap-3 sm:gap-4 justify-start sm:justify-center overflow-x-auto pb-2 mb-8">
         {categories.map((cat) => (
           <CategoryCard
             key={cat.name}
@@ -60,8 +60,8 @@ function Home() {
 
       {foodCategories.map((cat) => (
         <div key={cat} className="mb-10">
-          <h2 className="text-2xl font-bold mb-4">{cat}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <h2 className="text-xl sm:text-2xl font-bold mb-4">{cat}</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {food_list
               .filter((food) => food.category === cat)
               .map((food) => (

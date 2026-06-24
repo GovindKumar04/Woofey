@@ -1,4 +1,4 @@
-import axios from "../api/axios";
+import axios from "./axios";
 
 export const loginUser = async (data) => {
   const res = await axios.post("/user/login", data);
@@ -16,6 +16,6 @@ export const getLoggedInUser = async () => {
 };
 
 export const logoutUser = async () => {
-  const res = await axios.get("/user/logout");
+  const res = await axios.post("/user/logout");
   return res.data;
 };

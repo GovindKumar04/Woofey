@@ -178,9 +178,8 @@ export const assets = {
     selector_icon,
     profile_icon,
     logout_icon,
-    bag_icon,
-    
-    
+
+
 }
 
 export const menu_list = [

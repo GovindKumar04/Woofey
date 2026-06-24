@@ -1,68 +1,39 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { ToastContainer } from "react-toastify";
+
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import AuthModal from "./components/auth/AuthModal";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 import Profile from "./pages/Profile";
-import Login from "./auth/Login";
-import Signup from "./auth/Signup";
-import { ToastContainer } from "react-toastify";
-import { useDispatch } from "react-redux";
 import { fetchUser } from "./redux/authSlice";
 
 function App() {
-  const [showLogin, setShowLogin] = useState(false);
-  const [showSignup, setShowSignup] = useState(false);
   const dispatch = useDispatch();
 
-  useEffect( () => {
-    const a=dispatch( fetchUser());
-    console.log(a)
+  // Restore the logged-in user from the auth cookie on first load.
+  useEffect(() => {
+    dispatch(fetchUser());
   }, [dispatch]);
 
   return (
     <>
-      <Navbar
-        onLoginClick={() => setShowLogin(true)}
-        onSignupClick={() => setShowSignup(true)}
-      />
+      <Navbar />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/profile" element={<Profile />} />
-      </Routes>
+      <main className="min-h-screen">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+      </main>
 
-      {/* Login Modal */}
-      {showLogin && (
-        <>
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-40"
-            onClick={() => setShowLogin(false)}
-          />
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded-lg relative">
-              <Login onClose={() => setShowLogin(false)} />
-            </div>
-          </div>
-        </>
-      )}
+      <Footer />
 
-      {/* Signup Modal */}
-      {showSignup && (
-        <>
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-40"
-            onClick={() => setShowSignup(false)}
-          />
-          <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded-lg relative">
-              <Signup onClose={() => setShowSignup(false)} />
-            </div>
-          </div>
-        </>
-      )}
-
+      <AuthModal />
       <ToastContainer position="top-right" />
     </>
   );

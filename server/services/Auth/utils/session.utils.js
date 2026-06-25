@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
-import { redis } from "../config/redis.js";
+import { redis } from "../services/config/redis.js";
 
 // 15 days, in seconds — the refresh token / session lifetime.
 const REFRESH_TTL_SECONDS = Number(

@@ -10,15 +10,21 @@ services:
     restart: unless-stopped
 
   server:
-    build: ./server
-    container_name: woofey-server
+    build: ./server/services/Auth
+    container_name: woofey-auth-server
     ports:
+    
       - "5000:5000"
     env_file:
-      - ./server/.env
+      - ./server/services/Auth/.env
     environment:
       - NODE_ENV=development
       - REDIS_URL=redis://redis:6379
+    # Live reload: mount source, keep the image's node_modules.
+    volumes:
+      - ./server/services/Auth:/app
+      - /app/node_modules
+    command: ["node", "--watch", "index.js"]
     depends_on:
       - redis
     restart: unless-stopped
@@ -28,6 +34,10 @@ services:
     container_name: woofey-frontend
     ports:
       - "5173:5173"
+    # Live reload: mount source, keep the image's node_modules.
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     depends_on:
       - server
     restart: unless-stopped

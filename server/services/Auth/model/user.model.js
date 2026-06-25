@@ -75,23 +75,18 @@ const userSchema = new mongoose.Schema(
 userSchema.index({ role: 1 });
 userSchema.index({ status: 1 });
 
-// Assign a snowflake id on creation.
-userSchema.pre("save", async function (next) {
-  try {
-    if (this.isNew && !this.user_id) {
-      this.user_id = (await snowflake.generate()).toString();
-    }
-    next();
-  } catch (error) {
-    next(error);
+// Assign a snowflake id on creation. (mongoose 9 middleware is promise-based —
+// async hooks must not take a `next` callback.)
+userSchema.pre("save", async function () {
+  if (this.isNew && !this.user_id) {
+    this.user_id = (await snowflake.generate()).toString();
   }
 });
 
 // Hash password only when it changes.
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
   this.password = await bcrypt.hash(this.password, BCRYPT_ROUNDS);
-  next();
 });
 
 userSchema.methods.comparePassword = async function (password) {

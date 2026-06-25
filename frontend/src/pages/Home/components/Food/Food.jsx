@@ -4,11 +4,11 @@ import { assets } from "../../../../assets/assets";
 function Food({ name, image, price, description, count, onAdd, onRemove }) {
   return (
     <div className="bg-white shadow-md hover:shadow-xl rounded-lg overflow-hidden transition-shadow duration-300">
-      <img src={image} alt={name} className="h-48 w-full object-cover" />
-      <div className="p-4">
-        <h2 className="text-xl font-bold">{name}</h2>
-        <p className="text-gray-700 mb-2">{description}</p>
-        <p className="text-gray-900 font-semibold mb-4">₹{price}</p>
+      <img src={image} alt={name} className="h-36 sm:h-48 w-full object-cover" />
+      <div className="p-3 sm:p-4">
+        <h2 className="text-base sm:text-xl font-bold truncate">{name}</h2>
+        <p className="text-sm text-gray-700 mb-2 line-clamp-2">{description}</p>
+        <p className="text-gray-900 font-semibold mb-3 sm:mb-4">₹{price}</p>
 
         <div className="flex items-center gap-2">
           {count > 0 && (

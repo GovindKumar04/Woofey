@@ -1,5 +1,5 @@
 # Frontend (Vite + React) — dev server, reachable from the host
-FROM node:20-slim
+FROM node:24-slim
 
 WORKDIR /app
 

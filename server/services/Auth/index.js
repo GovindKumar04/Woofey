@@ -1,7 +1,7 @@
-import "./config/envConfig.js";
+import "./services/config/envConfig.js";
 
-import { connectDB } from "./config/db.js";
-import "./config/redis.js"; // establishes the Redis connection
+import { connectDB } from "./services/config/db.js";
+import "./services/config/redis.js"; // establishes the Redis connection
 import { app } from "./app.js";
 
 connectDB()

@@ -36,7 +36,7 @@ function Cart() {
         prefill: {
           name: user?.name || "",
           email: user?.email || "",
-          contact: user?.number || "",
+          contact: user?.phone_number || "",
         },
         theme: {
           color: "#16a34a",

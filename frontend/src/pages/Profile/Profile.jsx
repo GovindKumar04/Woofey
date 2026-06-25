@@ -37,7 +37,7 @@ function Profile() {
         </p>
         <p className="mb-2">
           <span className="font-semibold">Phone:</span>{" "}
-          {user?.number || "N/A"}
+          {user?.phone_number || "N/A"}
         </p>
 
         <p className="text-gray-500 mt-4 text-sm">

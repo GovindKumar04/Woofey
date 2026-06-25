@@ -10,7 +10,7 @@ function Login() {
   const { error, loading } = useSelector((s) => s.auth);
 
   const [email, setEmail] = useState("");
-  const [number, setNumber] = useState("");
+  const [phone_number, setNumber] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
@@ -19,7 +19,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await dispatch(login({ email, number, password }));
+    const res = await dispatch(login({ email, phone_number, password }));
     if (res.meta.requestStatus === "fulfilled") {
       toast.success("Login successful");
       dispatch(closeAuthModal());
@@ -62,7 +62,7 @@ function Login() {
         <input
           className={inputClass}
           placeholder="Phone number"
-          value={number}
+          value={phone_number}
           onChange={(e) => setNumber(e.target.value)}
         />
         <input

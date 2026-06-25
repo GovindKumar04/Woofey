@@ -4,23 +4,25 @@
   "description": "",
   "main": "index.js",
   "engines": {
-    "node": "20.x"
+    "node": "24.x"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "created" : "node utils/user_id.utils.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
+    "@skorotkiewicz/snowflake-id": "^1.0.1",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
+    "ioredis": "^5.4.1",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^8.5.0",
-    "razorpay": "^2.9.6"
+    "mongoose": "^8.5.0"
   }
 }

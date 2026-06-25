@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, NavLink } from "react-router-dom";
 import { logout } from "../../redux/authSlice";
 import { openLogin, openSignup } from "../../redux/uiSlice";
 import { assets } from "../../assets/assets";
@@ -13,7 +13,7 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
-  // Close the dropdown when clicking outside of it
+  
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -39,9 +39,8 @@ function Navbar() {
       </Link>
 
       <ul className="flex items-center gap-3 sm:gap-6 text-sm sm:text-base font-medium">
-        <li><Link to="/" className="hover:text-orange-600">Home</Link></li>
-        <li><Link to="/cart" className="hover:text-orange-600">Cart</Link></li>
-        <li className="hidden sm:block"><Link to="/profile" className="hover:text-orange-600">Profile</Link></li>
+        <li><NavLink to="/" className={({isActive}) => isActive ? "text-orange-600":"hover:text-orange-600"}>Home</NavLink></li>
+        <li><NavLink to="/cart" className="hover:text-orange-600 active:text-orange-600">Cart</NavLink></li>
       </ul>
 
       <div className="flex items-center gap-2 sm:gap-4">

@@ -1,102 +1,176 @@
-const { User } = require("../model/user.model.js");
-const { ApiError } = require("../utils/ApiError.js");
-const { asyncHandler } = require("../utils/asyncHandler.js");
-const { options } = require("../utils/httpOption.js");
+import jwt from "jsonwebtoken";
+import { User } from "../model/user.model.js";
+import { ApiError } from "../utils/ApiError.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import {
+  options,
+  accessCookieOptions,
+  refreshCookieOptions,
+} from "../utils/httpOption.js";
+import {
+  createSession,
+  getSession,
+  deleteSession,
+  deleteAllSessions,
+  rotateSession,
+} from "../utils/session.utils.js";
 
-const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, number, password } = req.body;
-
-  if ([name, email, number, password].some((field) => !field?.trim())) {
-    throw new ApiError(400, "All field are required");
-  }
-
-  const existingUser = await User.findOne({ $or: [{ email }, { number }] });
-  if (existingUser) throw new ApiError(400, "user already exist");
-
-  const user = await User.create({
-    name,
-    email,
-    number,
-    password,
+// Issues a stateless access token + a Redis-backed refresh session, and sets cookies.
+const issueAuth = async (user, res, req) => {
+  const accessToken = user.generateAccessToken();
+  const { refreshToken } = await createSession(user, {
+    ip: req?.ip,
+    userAgent: req?.get?.("user-agent"),
   });
 
-  if (!user) throw new ApiError(500, "Problem creating user");
-
   res
-    .status(200)
-    .json({ msg: `${name} your profile succesfully created`, user });
-});
+    .cookie("accessToken", accessToken, accessCookieOptions)
+    .cookie("refreshToken", refreshToken, refreshCookieOptions);
+};
 
-const loginUser = asyncHandler(async (req, res) => {
-  const { email, number, password } = req.body;
+const registerUser = asyncHandler(async (req, res) => {
+  const { name, email, phone_number, password } = req.body;
 
-  if (!(email || number) || !password) {
-    throw new ApiError(400, "All field are required");
+  if ([name, email, phone_number, password].some((field) => !field?.trim())) {
+    throw new ApiError(400, "All fields are required");
   }
 
-  const user = await User.findOne({ $or: [{ email }, { number }] });
-  if (!user) throw new ApiError(400, "user not found");
+  const existingUser = await User.findOne({
+    $or: [{ email }, { phone_number }],
+  });
+  if (existingUser) throw new ApiError(400, "User already exists");
 
-  const isPasswordMatched = await user.comparePassword(password);
-  if (!isPasswordMatched) {
-    throw new ApiError(400, "Invalid credentials");
-  }
+  const user = await User.create({ name, email, phone_number, password });
 
-  const accessToken = user.genrateAccessToken();
-  const refreshToken = user.genrateRefreshToken();
-
-  user.refreshToken = refreshToken;
-  await user.save({ validateBeforeSave: false });
+  // Log in immediately so the store + cookies stay consistent.
+  await issueAuth(user, res, req);
 
   res
     .status(201)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
-    .json({ msg: `welcome back ${user.name} `, user });
+    .json({ msg: `${name}, your profile was successfully created`, user });
+});
+
+const loginUser = asyncHandler(async (req, res) => {
+  const { email, phone_number, password } = req.body;
+
+  if (!(email || phone_number) || !password) {
+    throw new ApiError(400, "All fields are required");
+  }
+
+  const user = await User.findOne({
+    $or: [{ email }, { phone_number }],
+  }).select("+password");
+
+  if (!user) throw new ApiError(400, "User not found");
+  if (user.status !== "active") {
+    throw new ApiError(403, "Account is not active");
+  }
+
+  const isPasswordMatched = await user.comparePassword(password);
+  if (!isPasswordMatched) throw new ApiError(400, "Invalid credentials");
+
+  user.lastLoginAt = new Date();
+  await user.save({ validateBeforeSave: false });
+
+  await issueAuth(user, res, req);
+
+  res.status(200).json({ msg: `Welcome back ${user.name}`, user });
+});
+
+// Silent renewal: validate the refresh JWT + its Redis session, then rotate.
+const refreshAccessToken = asyncHandler(async (req, res) => {
+  const incomingToken = req.cookies?.refreshToken;
+  if (!incomingToken) throw new ApiError(401, "No refresh token provided");
+
+  let decoded;
+  try {
+    decoded = jwt.verify(incomingToken, process.env.REFRESH_TOKEN_SECRET);
+  } catch {
+    throw new ApiError(401, "Invalid or expired refresh token");
+  }
+
+  const session = await getSession(decoded.jti);
+  if (!session) throw new ApiError(401, "Session expired or revoked");
+
+  const user = await User.findOne({ user_id: decoded.user_id });
+  if (!user || user.status !== "active") {
+    throw new ApiError(401, "User is no longer active");
+  }
+
+  const accessToken = user.generateAccessToken();
+  const { refreshToken } = await rotateSession(decoded.jti, user, {
+    ip: req.ip,
+    userAgent: req.get("user-agent"),
+  });
+
+  res
+    .status(200)
+    .cookie("accessToken", accessToken, accessCookieOptions)
+    .cookie("refreshToken", refreshToken, refreshCookieOptions)
+    .json({ msg: "Token refreshed", user });
 });
 
 const updateUser = asyncHandler(async (req, res) => {
-  const { name, number, email, password } = req.body;
+  const { name, phone_number, email, password } = req.body;
 
-  if (!name && !number && !email && !password)
-    throw new ApiError(401, "Nothing to update");
+  if (!name && !phone_number && !email && !password)
+    throw new ApiError(400, "Nothing to update");
 
-  const user = req.user;
+  const user = await User.findOne({ user_id: req.user.user_id });
+  if (!user) throw new ApiError(404, "User not found");
 
-  if (number && number !== user.number) {
-    const existingUser = await User.findOne({ number });
-    if (existingUser) throw new ApiError(401, "this number already exist");
-    user.number = number;
+  if (phone_number && phone_number !== user.phone_number) {
+    const exists = await User.findOne({ phone_number });
+    if (exists) throw new ApiError(409, "This phone number already exists");
+    user.phone_number = phone_number;
   }
 
   if (email && email !== user.email) {
-    const existingUser = await User.findOne({ email });
-    if (existingUser) throw new ApiError(401, "this email already exist");
+    const exists = await User.findOne({ email });
+    if (exists) throw new ApiError(409, "This email already exists");
     user.email = email;
   }
 
   if (name) user.name = name;
-  if (password) user.password = password;
+
+  if (password) {
+    user.password = password;
+    // Force re-login everywhere after a credential change.
+    await deleteAllSessions(user.user_id);
+  }
 
   await user.save();
 
-  return res.status(200).json({ msg: "user updated succesfully" });
+  res.status(200).json({ msg: "User updated successfully", user });
 });
 
 const deleteUser = asyncHandler(async (req, res) => {
-  const user = req.user;
-  if (!user) throw new ApiError(401, "user not found");
+  const userId = req.user.user_id;
 
-  await User.deleteOne({ _id: user._id });
+  await User.deleteOne({ user_id: userId });
+  await deleteAllSessions(userId);
 
-  return res.status(200).json({ msg: "user deleted succesfully" });
+  res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json({ msg: "User deleted successfully" });
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
-  const user = req.user;
-
-  user.refreshToken = "";
-  await user.save({ validateBeforeSave: true });
+  // Revoke just this device's session.
+  const incomingToken = req.cookies?.refreshToken;
+  if (incomingToken) {
+    try {
+      const decoded = jwt.verify(
+        incomingToken,
+        process.env.REFRESH_TOKEN_SECRET,
+      );
+      await deleteSession(decoded.jti, decoded.user_id);
+    } catch {
+      // token already invalid — nothing to revoke
+    }
+  }
 
   res
     .status(200)
@@ -105,20 +179,31 @@ const logoutUser = asyncHandler(async (req, res) => {
     .json({ msg: "Logged out successfully" });
 });
 
-const loggedInUser = asyncHandler(async (req, res) => {
-  const user = req.user;
+// Revoke every session (all devices).
+const logoutAll = asyncHandler(async (req, res) => {
+  await deleteAllSessions(req.user.user_id);
 
-  if (!user)
-    return res.status(401).json({ user: "No user found" });
-
-  return res.status(200).json({ user });
+  res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json({ msg: "Logged out from all devices" });
 });
 
-module.exports = {
+const loggedInUser = asyncHandler(async (req, res) => {
+  const user = await User.findOne({ user_id: req.user.user_id });
+  if (!user) throw new ApiError(401, "No user found");
+
+  res.status(200).json({ user });
+});
+
+export {
   registerUser,
   loginUser,
+  refreshAccessToken,
   updateUser,
   deleteUser,
   logoutUser,
+  logoutAll,
   loggedInUser,
 };

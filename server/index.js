@@ -1,7 +1,8 @@
-require("./config/envConfig.js");
+import "./config/envConfig.js";
 
-const { connectDB } = require("./config/db.js");
-const { app } = require("./app.js");
+import { connectDB } from "./config/db.js";
+import "./config/redis.js"; // establishes the Redis connection
+import { app } from "./app.js";
 
 connectDB()
   .then(() => {

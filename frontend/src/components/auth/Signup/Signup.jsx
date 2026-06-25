@@ -12,7 +12,7 @@ function Signup() {
   const [form, setForm] = useState({
     name: "",
     email: "",
-    number: "",
+    phone_number: "",
     password: "",
   });
   const [confirm, setConfirm] = useState("");
@@ -70,8 +70,8 @@ function Signup() {
         <input
           className={inputClass}
           placeholder="Phone number"
-          value={form.number}
-          onChange={(e) => setForm({ ...form, number: e.target.value })}
+          value={form.phone_number}
+          onChange={(e) => setForm({ ...form, phone_number: e.target.value })}
         />
         <input
           className={inputClass}
